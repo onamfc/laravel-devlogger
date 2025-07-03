@@ -1,5 +1,6 @@
 DevLogger Package
 =================
+[![Packagist License](https://img.shields.io/badge/Licence-MIT-blue)](http://choosealicense.com/licenses/mit/)
 
 `DevLogger` is a custom logging package for Laravel that allows you to log messages to a database in production environments while still using the default Laravel logging for development environments. It also supports custom log levels, queues, and more.
 
