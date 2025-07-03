@@ -1,4 +1,5 @@
 # DevLogger Package
+[![Packagist License](https://img.shields.io/badge/Licence-MIT-blue)](http://choosealicense.com/licenses/mit/)
 
 `DevLogger` is a comprehensive logging package for Laravel that stores logs in a database with automatic error catching, advanced filtering, and management capabilities.
 
