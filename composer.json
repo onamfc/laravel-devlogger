@@ -1,11 +1,11 @@
 {
-    "name": "xantus/devlogger",
+    "name": "onamfc/devlogger-laravel",
     "description": "A custom logging package for Laravel with db",
     "type": "library",
     "authors": [
         {
             "name": "Brandon Estrella",
-            "email": "brandon@sitetransition.com"
+            "email": "brandonestrelladev@gmail.com"
         }
     ],
     "autoload": {
