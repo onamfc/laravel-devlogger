@@ -2,28 +2,60 @@
 
 namespace DevLoggerPackage\Providers;
 
+use DevLoggerPackage\Console\Commands\CleanupLogsCommand;
 use DevLoggerPackage\Services\DeveloperLogService;
 use Illuminate\Support\ServiceProvider;
 
-class DevLoggerServiceProvider extends ServiceProvider {
-    public function register() {
+class DevLoggerServiceProvider extends ServiceProvider
+{
+    /**
+     * Register services.
+     */
+    public function register(): void
+    {
+        // Merge package configuration
+        $this->mergeConfigFrom(
+            __DIR__ . '/../../config/devlogger.php',
+            'devlogger'
+        );
+
         // Register DeveloperLogService as a singleton
-        $this->app->singleton( 'devlogger', function ( $app ) {
+        $this->app->singleton('devlogger', function ($app) {
             return new DeveloperLogService();
-        } );
+        });
     }
 
-    public function boot() {
-        // Any bootstrapping for your package (optional)
-        $this->publishes( [
-            __DIR__ . '/../config/devlogger.php' => config_path( 'devlogger.php' ),
-        ] );
+    /**
+     * Bootstrap services.
+     */
+    public function boot(): void
+    {
+        // Publish configuration
+        $this->publishes([
+            __DIR__ . '/../../config/devlogger.php' => config_path('devlogger.php'),
+        ], 'devlogger-config');
 
-        // Publishing the migrations
-        if ( $this->app->runningInConsole() ) {
-            $this->publishes( [
-                __DIR__ . '/../../migrations/2024_01_01_000000_create_developer_logs_table.php' => database_path( 'migrations/' . date( 'Y_m_d_His' ) . '_create_developer_logs_table.php' ),
-            ], 'migrations' );
+        // Publish migrations
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__ . '/../../migrations/' => database_path('migrations'),
+            ], 'devlogger-migrations');
+
+            // Register commands
+            $this->commands([
+                CleanupLogsCommand::class,
+            ]);
+        }
+
+        // Load migrations
+        $this->loadMigrationsFrom(__DIR__ . '/../../migrations');
+
+        // Schedule cleanup if retention is configured
+        if (config('devlogger.retention_days')) {
+            $this->app->booted(function () {
+                $schedule = $this->app->make(\Illuminate\Console\Scheduling\Schedule::class);
+                $schedule->command('devlogger:cleanup')->daily();
+            });
         }
     }
 }
