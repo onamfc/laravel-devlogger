@@ -1,5 +1,5 @@
 {
-    "name": "onamfc/devlogger-laravel",
+    "name": "onamfc/laravel-devlogger",
     "version": "1.0.0",
     "description": "A custom logging package for Laravel with database storage and automatic error catching",
     "type": "library",

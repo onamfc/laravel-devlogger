@@ -1,26 +1,26 @@
-# DevLogger Package
+# Laravel DevLogger Package
 [![Packagist License](https://img.shields.io/badge/Licence-MIT-blue)](http://choosealicense.com/licenses/mit/)
 
 `DevLogger` is a comprehensive logging package for Laravel that stores logs in a database with automatic error catching, advanced filtering, and management capabilities.
 
 ## Features
 
-- 📊 **Database Logging**: Store logs in database with rich metadata
-- 🚨 **Automatic Error Catching**: Automatically capture and log all application exceptions
-- 🏷️ **Tagging System**: Organize logs with custom tags
-- 🔍 **Advanced Filtering**: Filter logs by level, date, queue, status, and more
-- 🧹 **Automatic Cleanup**: Configurable log retention with automatic cleanup
-- 🔄 **Queue Support**: Associate logs with specific queues
-- 📱 **Request Context**: Capture HTTP request information automatically
-- 👤 **User Tracking**: Track which user triggered each log entry
-- 🎯 **Flexible Configuration**: Extensive configuration options via environment variables
+- **Database Logging**: Store logs in database with rich metadata
+- **Automatic Error Catching**: Automatically capture and log all application exceptions
+- **Tagging System**: Organize logs with custom tags
+- **Advanced Filtering**: Filter logs by level, date, queue, status, and more
+- **Automatic Cleanup**: Configurable log retention with automatic cleanup
+- **Queue Support**: Associate logs with specific queues
+- **Request Context**: Capture HTTP request information automatically
+- **User Tracking**: Track which user triggered each log entry
+- **Flexible Configuration**: Extensive configuration options via environment variables
 
 ## Installation
 
 ### 1. Install via Composer
 
 ```bash
-composer require onamfc/devlogger-laravel
+composer require onamfc/laravel-devlogger
 ```
 
 ### 2. Publish Configuration and Migrations
