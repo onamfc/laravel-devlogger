@@ -14,7 +14,7 @@ return new class extends Migration
         $tableName = config('devlogger.table_name', 'developer_logs');
         $connection = config('devlogger.database_connection', null);
 
-        $schema = $connection ? Schema::connection($connection) : Schema::connection();
+        $schema = $connection ? Schema::connection($connection) : Schema;
         
         $schema->create($tableName, function (Blueprint $table) {
             $table->id();
@@ -52,7 +52,7 @@ return new class extends Migration
         $tableName = config('devlogger.table_name', 'developer_logs');
         $connection = config('devlogger.database_connection', null);
 
-        $schema = $connection ? Schema::connection($connection) : Schema::connection();
+        $schema = $connection ? Schema::connection($connection) : Schema;
         
         $schema->dropIfExists($tableName);
     }
