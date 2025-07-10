@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class DeveloperLog extends Model
 {
@@ -133,26 +134,34 @@ class DeveloperLog extends Model
 
     /**
      * Get formatted context for display
+     * 
+     * @return Attribute
      */
-    public function getFormattedContextAttribute(): string
+    protected function formattedContext(): Attribute
     {
-        if (empty($this->context)) {
-            return '';
-        }
-
-        return json_encode($this->context, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        return Attribute::make(
+            get: fn () => empty($this->context) 
+                ? '' 
+                : json_encode($this->context, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
+        );
     }
 
     /**
      * Get short file path (relative to project root)
+     * 
+     * @return Attribute
      */
-    public function getShortFilePathAttribute(): string
+    protected function shortFilePath(): Attribute
     {
-        if (empty($this->file_path)) {
-            return 'unknown';
-        }
-
-        $basePath = base_path();
-        return str_replace($basePath . '/', '', $this->file_path);
+        return Attribute::make(
+            get: function () {
+                if (empty($this->file_path)) {
+                    return 'unknown';
+                }
+                
+                $basePath = base_path();
+                return str_replace($basePath . '/', '', $this->file_path);
+            }
+        );
     }
 }

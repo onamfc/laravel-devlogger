@@ -4,7 +4,7 @@ namespace DevLoggerPackage\Services;
 
 use DevLoggerPackage\Models\DeveloperLog;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
 
@@ -167,11 +167,11 @@ class DeveloperLogService
             'line_number' => $callerInfo['line'],
             'queue' => $this->queue,
             'tags' => !empty($this->tags) ? $this->tags : null,
-            'request_url' => Request::fullUrl(),
-            'request_method' => Request::method(),
+            'request_url' => request()->fullUrl(),
+            'request_method' => request()->method(),
             'user_id' => Auth::id(),
-            'ip_address' => Request::ip(),
-            'user_agent' => Request::userAgent(),
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent(),
             'status' => 'open',
         ];
     }
@@ -194,11 +194,11 @@ class DeveloperLogService
             'stack_trace' => $exception->getTraceAsString(),
             'queue' => $this->queue,
             'tags' => !empty($this->tags) ? array_merge($this->tags, ['exception']) : ['exception'],
-            'request_url' => Request::fullUrl(),
-            'request_method' => Request::method(),
+            'request_url' => request()->fullUrl(),
+            'request_method' => request()->method(),
             'user_id' => Auth::id(),
-            'ip_address' => Request::ip(),
-            'user_agent' => Request::userAgent(),
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent(),
             'status' => 'open',
         ];
     }

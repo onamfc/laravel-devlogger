@@ -12,9 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         $tableName = config('devlogger.table_name', 'developer_logs');
-        $connection = config('devlogger.database_connection');
+        $connection = config('devlogger.database_connection', null);
 
-        Schema::connection($connection)->create($tableName, function (Blueprint $table) {
+        $schema = $connection ? Schema::connection($connection) : Schema::connection();
+        
+        $schema->create($tableName, function (Blueprint $table) {
             $table->id();
             $table->string('level')->index();
             $table->string('queue')->nullable()->index();
@@ -48,8 +50,10 @@ return new class extends Migration
     public function down(): void
     {
         $tableName = config('devlogger.table_name', 'developer_logs');
-        $connection = config('devlogger.database_connection');
+        $connection = config('devlogger.database_connection', null);
 
-        Schema::connection($connection)->dropIfExists($tableName);
+        $schema = $connection ? Schema::connection($connection) : Schema::connection();
+        
+        $schema->dropIfExists($tableName);
     }
 };
