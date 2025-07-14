@@ -1,7 +1,9 @@
 # Laravel DevLogger Package
+
 [![Packagist License](https://img.shields.io/badge/Licence-MIT-blue)](http://choosealicense.com/licenses/mit/)
 
-`DevLogger` is a comprehensive logging package for Laravel that stores logs in a database with automatic error catching, advanced filtering, and management capabilities.
+`DevLogger` is a comprehensive logging package for Laravel that stores logs in a database with automatic error catching,
+advanced filtering, and management capabilities.
 
 ## Features
 
@@ -102,9 +104,10 @@ try {
 }
 ```
 
-### Automatic Exception Catching
+### Automatic Exception Catching - Laravel 9, 10, 11
 
-The package automatically catches and logs all unhandled exceptions when `DEVLOGGER_AUTO_CATCH=true` (default). To set this up:
+The package automatically catches and logs all unhandled exceptions when `DEVLOGGER_AUTO_CATCH=true` (default). To set
+this up:
 
 #### Option 1: Extend the DevLogger Exception Handler
 
@@ -142,6 +145,31 @@ public function report(Throwable $exception)
 
     parent::report($exception);
 }
+```
+
+### Automatic Exception Catching - Laravel 12
+
+#### Integration
+
+The bootstrap directory contains the app.php file which bootstraps the framework: `bootstrap/app.php`. Within the
+withException method, you can integrate the DevLogger package to automatically catch exceptions:
+
+```php
+
+->withExceptions(function (Exceptions $exceptions) {
+   
+    $exceptions->report(function (Throwable $e){
+        if (config('devlogger.auto_catch_exceptions', true)) {
+            \DevLoggertPackage\Facades\DevLogger::logException($e, [
+                'url' => request()?->fullUrl(),
+                'method' => request()?->method(),
+                'input' => request()?->except(['password', 'password_confirmation', '_token']),
+            ]);
+        }
+        return true;
+    })
+    
+})->create();
 ```
 
 ## Advanced Usage
@@ -187,28 +215,28 @@ Automatic cleanup runs daily when `DEVLOGGER_RETENTION_DAYS` is configured.
 
 The `developer_logs` table includes these fields:
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | bigint | Primary key |
-| `level` | string | Log level (debug, info, error, etc.) |
-| `log` | longtext | The log message |
-| `context` | json | Additional context data |
-| `file_path` | string | File where log originated |
-| `line_number` | integer | Line number where log originated |
-| `exception_class` | string | Exception class name (for exceptions) |
-| `stack_trace` | longtext | Full stack trace (for exceptions) |
-| `queue` | string | Associated queue name |
-| `request_url` | string | HTTP request URL |
-| `request_method` | string | HTTP request method |
-| `user_id` | bigint | ID of authenticated user |
-| `ip_address` | string | Client IP address |
-| `user_agent` | text | Client user agent |
-| `status` | string | Log status (open/closed) |
-| `tags` | json | Array of tags |
-| `updated_by` | bigint | User who last updated the log |
-| `created_at` | timestamp | When log was created |
-| `updated_at` | timestamp | When log was last updated |
-| `deleted_at` | timestamp | Soft delete timestamp |
+| Field             | Type      | Description                           |
+|-------------------|-----------|---------------------------------------|
+| `id`              | bigint    | Primary key                           |
+| `level`           | string    | Log level (debug, info, error, etc.)  |
+| `log`             | longtext  | The log message                       |
+| `context`         | json      | Additional context data               |
+| `file_path`       | string    | File where log originated             |
+| `line_number`     | integer   | Line number where log originated      |
+| `exception_class` | string    | Exception class name (for exceptions) |
+| `stack_trace`     | longtext  | Full stack trace (for exceptions)     |
+| `queue`           | string    | Associated queue name                 |
+| `request_url`     | string    | HTTP request URL                      |
+| `request_method`  | string    | HTTP request method                   |
+| `user_id`         | bigint    | ID of authenticated user              |
+| `ip_address`      | string    | Client IP address                     |
+| `user_agent`      | text      | Client user agent                     |
+| `status`          | string    | Log status (open/closed)              |
+| `tags`            | json      | Array of tags                         |
+| `updated_by`      | bigint    | User who last updated the log         |
+| `created_at`      | timestamp | When log was created                  |
+| `updated_at`      | timestamp | When log was last updated             |
+| `deleted_at`      | timestamp | Soft delete timestamp                 |
 
 ## Configuration Options
 
