@@ -91,7 +91,7 @@ class DeveloperLog extends Model
     /**
      * Mark log as closed
      */
-    public function markAsClosed(int $userId = null): bool
+    public function markAsClosed(?int $userId = null): bool
     {
         return $this->update([
             'status' => 'closed',
