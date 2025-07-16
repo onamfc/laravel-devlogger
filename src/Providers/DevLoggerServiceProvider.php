@@ -15,7 +15,7 @@ class DevLoggerServiceProvider extends ServiceProvider
     {
         // Merge package configuration
         $this->mergeConfigFrom(
-            __DIR__ . '/../../../config/devlogger.php',
+            __DIR__ . '/../../config/devlogger.php',
             'devlogger'
         );
 
@@ -32,13 +32,13 @@ class DevLoggerServiceProvider extends ServiceProvider
     {
         // Publish configuration
         $this->publishes([
-            __DIR__ . '/../../../config/devlogger.php' => config_path('devlogger.php'),
+            __DIR__ . '/../../config/devlogger.php' => config_path('devlogger.php'),
         ], 'devlogger-config');
 
         // Publish migrations
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../../../migrations/' => database_path('migrations'),
+                __DIR__ . '/../../migrations/' => database_path('migrations'),
             ], 'devlogger-migrations');
 
             // Register commands
@@ -48,7 +48,7 @@ class DevLoggerServiceProvider extends ServiceProvider
         }
 
         // Load migrations
-        $this->loadMigrationsFrom(__DIR__ . '/../../../migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../../migrations');
 
         // Schedule cleanup if retention is configured
         if (config('devlogger.retention_days')) {
