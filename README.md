@@ -160,14 +160,14 @@ withException method, you can integrate the DevLogger package to automatically c
    
     $exceptions->report(function (Throwable $e){
         if (config('devlogger.auto_catch_exceptions', true)) {
-            \DevLoggertPackage\Facades\DevLogger::logException($e, [
+            \DevLoggerPackage\Facades\DevLogger::logException($e, [
                 'url' => request()?->fullUrl(),
                 'method' => request()?->method(),
                 'input' => request()?->except(['password', 'password_confirmation', '_token']),
             ]);
         }
         return true;
-    })
+    });
     
 })->create();
 ```
