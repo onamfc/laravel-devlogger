@@ -33,13 +33,13 @@ class DevLoggerServiceProvider extends ServiceProvider
         // Publish configuration
         $this->publishes([
             __DIR__ . '/../../config/devlogger.php' => config_path('devlogger.php'),
-        ], 'devlogger-config');
+        ], ['devlogger-config', 'devlogger']);
 
         // Publish migrations
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__ . '/../../migrations/' => database_path('migrations'),
-            ], 'devlogger-migrations');
+            ], ['devlogger-migrations', 'devlogger']);
 
             // Register commands
             $this->commands([
