@@ -276,7 +276,7 @@ return [
 ## Performance Considerations
 
 - The package uses database indexes for optimal query performance
-- Automatic cleanup prevents database bloat
+- Automatic cleanup prevents database bloat - [Database Archiver for Laravel](https://github.com/onamfc/laravel-database-archiver)
 - Failed database writes fall back to Laravel's default logging
 - Excluded paths prevent logging of framework internals
 
