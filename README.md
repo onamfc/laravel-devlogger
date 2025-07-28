@@ -1,9 +1,11 @@
-# Laravel DevLogger Package
 
-[![Packagist License](https://img.shields.io/badge/Licence-MIT-blue)](http://choosealicense.com/licenses/mit/)
+<h1 align="center"><img src="https://dpt3aqeyfpth5.cloudfront.net/devlogger/img/devlogger-logo--dark.png" height="128"></h1>
+<img src="https://img.shields.io/badge/License-MIT-blue.svg" />
+<p align="center">
+  <b>A comprehensive logging package for Laravel that stores logs in a database with automatic error catching,
+advanced filtering, and management capabilities.</b>
+</p>
 
-`DevLogger` is a comprehensive logging package for Laravel that stores logs in a database with automatic error catching,
-advanced filtering, and management capabilities.
 
 ## Features
 
@@ -276,7 +278,8 @@ return [
 ## Performance Considerations
 
 - The package uses database indexes for optimal query performance
-- Automatic cleanup prevents database bloat - [Database Archiver for Laravel](https://github.com/onamfc/laravel-database-archiver)
+- Automatic cleanup prevents database
+  bloat - [Database Archiver for Laravel](https://github.com/onamfc/laravel-database-archiver)
 - Failed database writes fall back to Laravel's default logging
 - Excluded paths prevent logging of framework internals
 
