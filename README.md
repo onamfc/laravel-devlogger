@@ -1,6 +1,5 @@
 
 <h1 align="center"><img src="https://dpt3aqeyfpth5.cloudfront.net/devlogger/img/devlogger-logo-i--dark.png" height="128"></h1>
-<p align="center"><img src="https://img.shields.io/badge/License-MIT-blue.svg" /></p>
 <p align="center">
   <b>A comprehensive logging package for Laravel that stores logs in a database with automatic error catching,
 advanced filtering, and management capabilities.</b>
