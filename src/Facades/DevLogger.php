@@ -17,7 +17,8 @@ use Illuminate\Support\Facades\Facade;
  * @method static \DevLoggerPackage\Services\DeveloperLogService logException(\Throwable $exception, array $context = [])
  * @method static \DevLoggerPackage\Services\DeveloperLogService onQueue(string $queue)
  * @method static \DevLoggerPackage\Services\DeveloperLogService withTags(array $tags)
- * @method static int cleanup()
+ * @method static int cleanup(?int $days = null, int $chunkSize = 1000)
+ * @method static int cleanupCandidates(?int $days = null)
  *
  * @see \DevLoggerPackage\Services\DeveloperLogService
  */

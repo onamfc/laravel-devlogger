@@ -6,10 +6,17 @@ use DevLoggerPackage\Models\DeveloperLog;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Throwable;
 
 class DeveloperLogService
 {
+    /**
+     * Rows removed per statement when cleaning up. Small enough that a table left unattended for
+     * months still deletes in committed steps rather than one unbounded transaction.
+     */
+    public const CLEANUP_CHUNK_SIZE = 1000;
+
     protected ?string $queue = null;
     protected array $tags = [];
 
@@ -137,19 +144,61 @@ class DeveloperLogService
     }
 
     /**
-     * Clean up old logs based on retention policy
+     * Clean up old logs based on retention policy.
+     *
+     * @param int|null $days      Overrides devlogger.retention_days when given.
+     * @param int      $chunkSize Rows removed per statement.
      */
-    public function cleanup(): int
+    public function cleanup(?int $days = null, int $chunkSize = self::CLEANUP_CHUNK_SIZE): int
     {
-        $retentionDays = config('devlogger.retention_days');
-        
+        $retentionDays = $days ?? config('devlogger.retention_days');
+
         if (!$retentionDays) {
             return 0;
         }
 
         $cutoffDate = now()->subDays($retentionDays);
-        
-        return DeveloperLog::where('created_at', '<', $cutoffDate)->delete();
+
+        /**
+         * Deleted through the query builder rather than the model. DeveloperLog applies
+         * SoftDeletes, so the Eloquent delete() this used to call only stamped deleted_at:
+         * expired logs stayed in the table, kept occupying disk, and were stamped again on every
+         * subsequent run. Retention means the rows go.
+         *
+         * Removed in chunks because retention tables get large when cleanup has not been running -
+         * a single statement over millions of rows builds an enormous transaction and tends to
+         * time out, taking the whole delete with it. Each chunk commits on its own, so an
+         * interrupted run keeps everything it already removed.
+         */
+        $table = (new DeveloperLog())->getTable();
+        $deleted = 0;
+
+        do {
+            $removed = DB::table($table)
+                ->where('created_at', '<', $cutoffDate)
+                ->limit($chunkSize)
+                ->delete();
+
+            $deleted += $removed;
+        } while ($removed > 0);
+
+        return $deleted;
+    }
+
+    /**
+     * Count the logs a cleanup would remove, soft-deleted rows included.
+     */
+    public function cleanupCandidates(?int $days = null): int
+    {
+        $retentionDays = $days ?? config('devlogger.retention_days');
+
+        if (!$retentionDays) {
+            return 0;
+        }
+
+        return DB::table((new DeveloperLog())->getTable())
+            ->where('created_at', '<', now()->subDays($retentionDays))
+            ->count();
     }
 
     /**
